@@ -5,7 +5,7 @@ import sys
 if len(sys.argv) <= 1:
     print('Usage : "python ProxyServer.py server_ip"')
     print('[server_ip : It is the IP Address Of Proxy Server]')
-    # sys.exit(2)
+    #sys.exit(2)
 # Create a server socket, bind it to a port and start listening
 
 tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -13,7 +13,7 @@ tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Fill in start.
 recv_buffer = 4096
 TCP_IP = "localhost"
-TCP_PORT = 8888
+TCP_PORT = 5635
 tcpSerSock.bind((TCP_IP, TCP_PORT))
 tcpSerSock.listen(2)
 print("Listening on TCP port number: ", TCP_PORT)
@@ -74,8 +74,8 @@ while 1:
         if fileExist == "false":
             print("Hello!")
             file = file[1:]
-            #hostn = file
-            # Create a socket on the proxyserver
+            #Hostn = file
+            # Create a socket on the proxy server
             c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             hostname = file.replace("www.", "", 1)
             print(hostname + "**********************************************")
@@ -93,7 +93,7 @@ while 1:
                     con = hostname
                     fileobj.write(b'GET / HTTP/1.0\r\n\r\n')
                 else:
-                    print("****Get path in referer: " + hostname)
+                    print("Get path in referer: " + hostname)
                     c.connect((con, 80))
                     fileobj.write(b'GET /' + hostname + ' HTTP/1.0\r\n\r\n'.encode())
                 # Read the response into buffer
