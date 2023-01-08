@@ -6,7 +6,8 @@ import os
 
 
 if len(sys.argv) <= 1:
-    print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
+    print('Usage : "python ProxyServer.py server_ip"')
+    print('[server_ip : It is the IP Address Of Proxy Server]')
     # sys.exit(2)
 # Create a server socket, bind it to a port and start listening
 
@@ -18,7 +19,7 @@ TCP_IP = "localhost"
 TCP_PORT = 8888
 tcpSerSock.bind((TCP_IP, TCP_PORT))
 tcpSerSock.listen(2)
-print("Listening on port: ", TCP_PORT)
+print("Listening on TCP port number: ", TCP_PORT)
 
 # Fill in end.
 
@@ -27,7 +28,7 @@ while 1:
     # Start receiving data from the client
     print ('\n\nReady to serve...')
     tcpCliSock, addr = tcpSerSock.accept()  # return address and tcp client socket
-    print ('Received a connection from:', addr)
+    print ('Received a connection from address:', addr)
     # fill in start
     message = tcpCliSock.recv(4096)
     # fill in end
@@ -41,6 +42,7 @@ while 1:
     filetouse = file
     URL = file[1:]
 
+    # URL filter
     # check if file is blocked or not in the list of blocked urls of the server
     getout = 1
     with open('blockedfiles.txt') as f:
@@ -68,18 +70,18 @@ while 1:
         tcpCliSock.sendall(outputdata)
         # Fill in end.
         f.close()
-        print('Read from cache')
+        print('Read from cache...')
 
     # Error handling for file not found in cache
     except IOError:
         if fileExist == "false":
-            print("hi")
+            print("Hello!")
             file = file[1:]
             #hostn = file
             # Create a socket on the proxyserver
             c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             hostname = file.replace("www.", "", 1)
-            print(hostname + "=============================================================")
+            print(hostname + "**********************************************")
             try:
                 # Connect to the socket to port 80
                 # Fill in start.
@@ -87,7 +89,7 @@ while 1:
 
                 print("/////////////////////////////////////////////////////:")
                 if not ("Referer" in message):
-                    print("*Connecting to server"+ hostname)
+                    print("*Connecting to server: "+ hostname)
                     # Connect to the socket to port 80
                     c.connect((hostname, 80))
                     print(hostname)
@@ -99,10 +101,10 @@ while 1:
                     fileobj.write(b'GET /' + hostname + ' HTTP/1.0\r\n\r\n'.encode())
                 # Read the response into buffer
                 # Fill in start.
-                print("done")
+                print("Done")
                 buff = fileobj.read()
 
-                print("done2")
+                print("Done 2")
                 # Fill in end.
 
                 # Create a new file in the cache for the requested file.
@@ -115,16 +117,16 @@ while 1:
                     tmpFile.write(buff[i])
 
 
-                print("done3")
+                print("Done 3")
                 tcpCliSock.sendall("HTTP/1.0 200 OK\r\n".encode())
                 tcpCliSock.sendall("Content-Type:text/html\r\n".encode())
                 tcpCliSock.sendall("Content-Type: image/jpeg\r\n".encode())
-                print("done4")
+                print("Done 4")
 
                 tcpCliSock.sendall(buff)
                 #print(buff)
                 # Fill in end.
-                print('sent to client')
+                print('***sent to client***')
                 tmpFile.close()
             except socket.timeout as ti:
                 tcpCliSock.send(b'HTTP/1.0 522 Connection timed out\r\n')
@@ -151,10 +153,6 @@ while 1:
                 tcpCliSock.send(b'\r\n')
 
 
-            # except socket.gaierror:
-            #     open(error.txt)
-            #     tcpCliSock.sendall(file.read)
-
         else:
             # HTTP response message for file not found
             # Fill in start.
@@ -168,9 +166,10 @@ while 1:
                        '</html>'
             tcpCliSock.send(header.encode() + response.encode())
             # Fill in end.
-            # Close the client and the server sockets
 
+        # Close the client and the server sockets
         tcpCliSock.close()
 
-    # Fill in start.
+# Fill in start.
 tcpSerSock.close()
+# Fill in end.
