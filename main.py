@@ -1,8 +1,5 @@
 import socket
 import sys
-import select
-import ssl
-import os
 
 
 if len(sys.argv) <= 1:
