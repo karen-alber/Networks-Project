@@ -167,7 +167,7 @@ while 1:
             tcpCliSock.send(header.encode() + response.encode())
             # Fill in end.
 
-        # Close the client and the server sockets
+# Close the client and the server sockets
         tcpCliSock.close()
 
 # Fill in start.
